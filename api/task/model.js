@@ -1,51 +1,33 @@
-// build your `Task` model here
-// build your `Task` model here
-// build your `Task` model here
-const knex = require('../../data/dbConfig');
+// build your `Resource` model here
+// build your `Resource` model here
+const knex = require("../../data/dbConfig");
 
-const getAllTasks = async () => {
-  const tasks = await knex('tasks')
-    .join('projects', 'tasks.project_id', 'projects.project_id')
-    .select(
-      'tasks.task_id',
-      'tasks.task_description',
-      'tasks.task_notes',
-      'projects.project_name',
-      'tasks.task_completed',
-      'projects.project_description'
-    );
-  return tasks;
-};
-
-const createTask = async (projectId, description, notes) => {
-  const [taskId] = await knex("tasks").insert({
-    project_id: projectId,
-    task_description: description,
-    task_notes: notes,
+const createResource = async (name, description) => {
+  const [resourceId] = await knex("resources").insert({
+    resource_name: name,
+    resource_description: description,
   });
-  const newTask = await getTaskById(taskId);
-  // Convert task_completed to boolean
-  newTask.task_completed = !!newTask.task_completed;
-  return newTask;
+
+  const newResource = await getResourceById(resourceId);
+  return newResource;
 };
 
-const getTaskById = async (id) => {
-  const task = await knex('tasks')
-    .join('projects', 'tasks.project_id', 'projects.project_id')
-    .select(
-      'tasks.task_id',
-      'tasks.task_description',
-      'tasks.task_notes',
-      'tasks.task_completed',
-      'projects.project_name',
-      'projects.project_description'
-    )
-    .where('tasks.task_id', id)
+const getResources = async () => {
+  const resources = await knex("resources").select("resource_id", "resource_name", "resource_description");
+  return resources;
+};
+
+const getResourceById = async (id) => {
+  const resource = await knex("resources")
+    .select("resource_id", "resource_name", "resource_description")
+    .where({ resource_id: id })
     .first();
-  return task;
+
+  return resource;
 };
 
 module.exports = {
-  getAllTasks,
-  createTask,
+  createResource,
+  getResourceById,
+  getResources
 };
