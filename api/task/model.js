@@ -9,7 +9,7 @@ const getTasksById = async (id) =>{
   return await db('tasks').select('*').where({tasks_id: id}).first();
 }
 
-const addTask = async (newTask) => {
+const addTask = async (newTask) => { 
   return await db('tasks').insert(newTask);
 }
 
