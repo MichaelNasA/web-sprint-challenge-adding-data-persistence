@@ -1,33 +1,20 @@
-// build your `Resource` model here
-// build your `Resource` model here
-const knex = require("../../data/dbConfig");
+// build your `Project` model here
+const db = require('../../data/dbConfig')
 
-const createResource = async (name, description) => {
-  const [resourceId] = await knex("resources").insert({
-    resource_name: name,
-    resource_description: description,
-  });
+const getTasks = async () =>{
+  return await db('tasks').select('*');
+}
 
-  const newResource = await getResourceById(resourceId);
-  return newResource;
-};
+const getTasksById = async (id) =>{
+  return await db('tasks').select('*').where({tasks_id: id}).first();
+}
 
-const getResources = async () => {
-  const resources = await knex("resources").select("resource_id", "resource_name", "resource_description");
-  return resources;
-};
+const addTask = async (newTask) => {
+  return await db('tasks').insert(newTask);
+}
 
-const getResourceById = async (id) => {
-  const resource = await knex("resources")
-    .select("resource_id", "resource_name", "resource_description")
-    .where({ resource_id: id })
-    .first();
-
-  return resource;
-};
-
-module.exports = {
-  createResource,
-  getResourceById,
-  getResources
-};
+module.exports = { 
+  getTasks,
+  addTask,
+  getTasksById
+}

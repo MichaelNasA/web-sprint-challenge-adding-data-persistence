@@ -1,34 +1,20 @@
+const { getTasks, addTask, getTaskById } = require('./model')
 // build your `/api/tasks` router here
-// build your `/api/tasks` router here
-// build your `/api/tasks` router here
-const express = require('express');
-const router = express.Router();
-const { getAllTasks, createTask } = require('./model');
+const taskRouter = require('express').Router();
 
-// Route to get all tasks
-router.get('/', async (req, res) => {
-  try {
-    const tasks = await getAllTasks();
-    // Ensure task_completed property is included for each task
-    const tasksWithCompleted = tasks.map(task => ({
-      ...task,
-      task_completed: !!task.task_completed // Ensure task_completed is converted to boolean
-    }));
-    res.json(tasksWithCompleted);
-  } catch (error) {
-    res.status(500).json({ error: "Could not retrieve tasks from the database." });
-  }
-});
+taskRouter.get('/', async (req, res) => {
+    let tasks = await getTasks();
+    tasks = tasks.map(task => {
+        return {...task, task_completed: !!task.task_completed}
+    })
+    res.send(tasks);
+  })
+  
+  taskRouter.post('/', async (req, res) => {
+    const ids = await addTask(req.body);
+    let task = await getTaskById(ids[0]);
+    task = {...task, task_completed: !!task.task_complete}
+    res.send(task);
+  })
 
-// Route to create a new task
-router.post('/', async (req, res) => {
-  try {
-    const { task_description, task_notes, project_id } = req.body;
-    const newTask = await createTask(project_id, task_description, task_notes);
-    res.status(201).json({ ...newTask, task_completed: !!newTask.task_completed });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create a new task." });
-  }
-});
-
-module.exports = router;
+module.exports = taskRouter

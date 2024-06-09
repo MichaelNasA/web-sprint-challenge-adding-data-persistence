@@ -1,27 +1,17 @@
+const { getResources, addResource, getResourcesById } = require('./model');
+
 // build your `/api/resources` router here
-const express = require("express");
-const router = express.Router();
-const { createResource, getResources } = require("./model"); // Import the model functions
+const resourceRouter = require('express').Router();
 
-// GET route to fetch all resources
-router.get('/', async (req, res) => {
-  try {
-    const resources = await getResources();
-    res.json(resources);
-  } catch (error) {
-    res.status(500).json({ error: "Could not retrieve resources from the database." });
-  }
-});
+resourceRouter.get('/', async (req, res) => {
+  const resources =await getResources();
+  res.send(resources);
+})
 
-// Route to create a new resource
-router.post('/', async (req, res) => {
-  try {
-    const { resource_name, resource_description } = req.body;
-    const newResource = await createResource(resource_name, resource_description);
-    res.status(201).json(newResource);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create a new resource." });
-  }
-});
+resourceRouter.post('/', async (req, res) => {
+  const ids = await addResource(req.body);
+  const result = await getResourcesById(ids[0]);
+  res.send(result);
+})
 
-module.exports = router;
+module.exports = resourceRouter
