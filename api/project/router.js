@@ -12,9 +12,13 @@ projectRouter.get('/', async (req, res) => {
   })
   
   projectRouter.post('/', async (req, res) => {
-    const ids = await addProject(req.body);
+    if (!req.body.project_name) res.sendStatus(500);
+    else{
+        const ids = await addProject(req.body);
     const project = await getProjectsById(ids[0]);
-    res.send(project);
+    res.send({...project, project_completed: !!project.project_completed});
+    }
+    
   })
 
 module.exports = projectRouter

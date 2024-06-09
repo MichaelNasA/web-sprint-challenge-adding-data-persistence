@@ -10,12 +10,14 @@ taskRouter.get("/", async (req, res) => {
     const project = await getProjectById(task.project_id);
     tasksWithProject.push({
       ...task,
-      task_completed: !!task.task_completed,
-      project_description: project.project_description,
       project_name: project.project_name,
+      project_description: project.project_description
     });
   }
-  res.send(tasks);
+  const result = tasksWithProject.maps(task => {
+    return {...task, task_completed: !!task.task_completed}
+  })
+  res.send(result);
 });
 
 taskRouter.post("/", async (req, res) => {
