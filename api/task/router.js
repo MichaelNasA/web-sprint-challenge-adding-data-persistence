@@ -21,7 +21,10 @@ taskRouter.get("/", async (req, res) => {
 });
 
 taskRouter.post("/", async (req, res) => {
-  const project = await getProjectById(req.body.project_id);
+  const projectId = req.body.project_id;
+  if(!projectId) res.sendStatus(404);
+  else{
+    const project = await getProjectById(req.body.project_id);
   if (!project) res.sendStatus(500);
   else {
     try {
@@ -33,6 +36,9 @@ taskRouter.post("/", async (req, res) => {
       res.sendStatus(500);
     }
   }
+
+  }  
+  
 });
 
 module.exports = taskRouter;
