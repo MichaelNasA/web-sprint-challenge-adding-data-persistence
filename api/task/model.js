@@ -5,7 +5,7 @@ const getTasks = async () =>{
   return await db('tasks').select('*');
 }
 
-const getTasksById = async (id) =>{
+const getTaskById = async (id) =>{
   return await db('tasks').select('*').where({tasks_id: id}).first();
 }
 
@@ -16,5 +16,5 @@ const addTask = async (newTask) => {
 module.exports = { 
   getTasks,
   addTask,
-  getTasksById
+  getTaskById
 }

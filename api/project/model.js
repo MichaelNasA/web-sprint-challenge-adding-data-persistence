@@ -6,7 +6,7 @@ const getProjects = async () =>{
 }
 
 const getProjectsById = async (id) =>{
-  return await db('projects').select('*').where({projects_id: id}).first();
+  return await db('projects').select('*').where({project_id: id}).first();
 }
 
 const addProject = async (newProject) => {
