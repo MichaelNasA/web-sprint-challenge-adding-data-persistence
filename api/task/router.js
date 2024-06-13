@@ -25,9 +25,8 @@ taskRouter.post("/", async (req, res) => {
   if(!projectId) res.sendStatus(404);
   else{
     const project = await getProjectsById(req.body.project_id);
-    console.log(project);
-  //if (!project) res.sendStatus(500);
-  //else {
+  if (!project) res.sendStatus(500);
+  else {
     try {
       console.log(req.body)
       const ids = await addTask(req.body);
@@ -38,7 +37,7 @@ taskRouter.post("/", async (req, res) => {
     } catch (e) {
       res.sendStatus(500);
     }
-  //}
+  }
 
   }  
   
