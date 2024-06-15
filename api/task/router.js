@@ -28,13 +28,13 @@ taskRouter.post("/", async (req, res) => {
   if (!project) res.sendStatus(500);
   else {
     try {
-      console.log(req.body)
       const ids = await addTask(req.body);
-      //console.log(ids)
+      console.log(ids)
       let task = await getTaskById(ids[0]);
       task = { ...task, task_completed: !!task.task_completed };
-      res.send(task);
+      res.json(task);
     } catch (e) {
+      console.log("working")
       res.sendStatus(500);
     }
   }

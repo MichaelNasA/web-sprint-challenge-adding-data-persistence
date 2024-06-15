@@ -6,7 +6,7 @@ const getTasks = async () =>{
 }
 
 const getTaskById = async (id) =>{
-  return await db('tasks').select('*').where({tasks_id: id}).first();
+  return await db('tasks').select('*').where({task_id: id}).first();
 }
 
 const addTask = async (newTask) => { 
